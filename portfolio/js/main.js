@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ctaSecondary = document.getElementById('cta-secondary');
 
   nameEl.textContent = d.basics.name;
-  roleEl.textContent = d.basics.role + (d.basics.location ? ` · ${d.basics.location}` : '');
+  roleEl.textContent = d.basics.role ;
   imgEl.src = d.basics.profileImage || imgEl.src;
   imgEl.addEventListener('error', () => { imgEl.src = 'assets/profile-placeholder.svg'; }, { once: true });
   ctaPrimary.textContent = d.basics.ctaPrimaryText || ctaPrimary.textContent;
@@ -355,5 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
   }
 });
+
 
 
