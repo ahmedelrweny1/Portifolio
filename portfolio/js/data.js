@@ -1,4 +1,14 @@
-window.PORTFOLIO_DATA = {
+// Initialize portfolio data
+(function() {
+  'use strict';
+  
+  // Make sure we're in a browser environment
+  if (typeof window === 'undefined') {
+    console.error('Not in browser environment');
+    return;
+  }
+
+  window.PORTFOLIO_DATA = {
   meta: {
     siteTitle: "Ahmed Elrweny — Full Stack Developer",
     favicon: ""
@@ -6,6 +16,7 @@ window.PORTFOLIO_DATA = {
   basics: {
     name: "Ahmed Elrweny",
     role: "Full Stack Developer",
+    location: "Kafr EL-Sheikh, Egypt",
     email: "elrwenyahmed05@gmail.com",
     resumeUrl: "assets/Resume.pdf",
     profileImage: "assets/Personal2.jpg",
@@ -100,5 +111,7 @@ window.PORTFOLIO_DATA = {
   }
 };
 
-
+  // Log successful initialization
+  console.log('Portfolio data initialized successfully');
+})();
 

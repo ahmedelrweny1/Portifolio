@@ -1,16 +1,3 @@
-// Fallback to hide loading screen after timeout
-const forceHideLoading = () => {
-  const loadingScreen = document.getElementById('loading-screen');
-  if (loadingScreen) {
-    console.warn('Force hiding loading screen after timeout');
-    loadingScreen.classList.add('fade-out');
-    setTimeout(() => loadingScreen.remove(), 800);
-  }
-};
-
-// Set maximum loading time to 5 seconds
-setTimeout(forceHideLoading, 5000);
-
 document.addEventListener('DOMContentLoaded', () => {
   const d = window.PORTFOLIO_DATA;
   console.log('Portfolio data:', d); // Debug log
@@ -340,32 +327,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Hide loading screen after content is ready
+  // Hide loading screen after everything is loaded
   const loadingScreen = document.getElementById('loading-screen');
-  
-  // Function to check if all images are loaded
-  const checkImagesLoaded = () => {
-    const images = document.querySelectorAll('img');
-    return Array.from(images).every(img => img.complete);
-  };
-
-  // Function to hide loading screen
-  const hideLoadingScreen = () => {
+  setTimeout(() => {
     if (loadingScreen) {
       loadingScreen.classList.add('fade-out');
       setTimeout(() => {
         loadingScreen.remove();
       }, 800);
     }
-  };
-
-  // Check if everything is loaded
-  if (document.readyState === 'complete' && checkImagesLoaded()) {
-    hideLoadingScreen();
-  } else {
-    // Wait for everything to load
-    window.addEventListener('load', hideLoadingScreen);
-  }
+  }, 1500); // Show loading for at least 1.5 seconds
 
   // Mobile nav toggle
   const nav = document.querySelector('.site-nav');
