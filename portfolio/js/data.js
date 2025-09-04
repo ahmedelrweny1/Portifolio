@@ -16,7 +16,7 @@
   basics: {
     name: "Ahmed Elrweny",
     role: "Full Stack Developer",
-    location: "Kafr EL-Sheikh, Egypt",
+    location: " ",
     email: "elrwenyahmed05@gmail.com",
     resumeUrl: "assets/Resume.pdf",
     profileImage: "assets/Personal2.jpg",
@@ -114,4 +114,5 @@
   // Log successful initialization
   console.log('Portfolio data initialized successfully');
 })();
+
 
