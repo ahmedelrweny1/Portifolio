@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Hero
   const nameEl = document.getElementById('hero-name');
-  const roleEl = document.getElementById('hero-role');
   const imgEl = document.getElementById('profile-image');
   const socialEl = document.getElementById('social-links');
   const ctaPrimary = document.getElementById('cta-primary');
@@ -355,5 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
   }
 });
+
 
 
