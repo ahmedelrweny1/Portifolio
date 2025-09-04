@@ -6,7 +6,6 @@ window.PORTFOLIO_DATA = {
   basics: {
     name: "Ahmed Elrweny",
     role: "Full Stack Developer",
-    location: "Kafr EL-Sheikh, Egypt",
     email: "elrwenyahmed05@gmail.com",
     resumeUrl: "assets/Resume.pdf",
     profileImage: "assets/Personal2.jpg",
@@ -100,5 +99,6 @@ window.PORTFOLIO_DATA = {
     blurb: "Open to opportunities and collaborations."
   }
 };
+
 
 
