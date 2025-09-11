@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ctaSecondary = document.getElementById('cta-secondary');
 
   nameEl.textContent = d.basics.name;
-  roleEl.textContent = d.basics.role ;
+  roleEl.textContent = d.basics.role;
   imgEl.src = d.basics.profileImage || imgEl.src;
   imgEl.addEventListener('error', () => { imgEl.src = 'assets/profile-placeholder.svg'; }, { once: true });
   ctaPrimary.textContent = d.basics.ctaPrimaryText || ctaPrimary.textContent;
@@ -264,6 +264,81 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Certificates
+  const certGrid = document.getElementById('cert-grid');
+  if (certGrid && Array.isArray(d.certificates)) {
+    certGrid.innerHTML = '';
+    d.certificates.forEach((c, idx) => {
+      const card = document.createElement('figure');
+      card.className = 'cert-card reveal';
+      card.innerHTML = `
+        <img class="cert-thumb" src="${c.image || ''}" alt="${c.title || 'Certificate'}">
+        <figcaption class="cert-caption">
+          <div class="cert-title">${c.title || 'Certificate'}</div>
+          ${c.description ? `<div class="cert-desc">${c.description}</div>` : ''}
+        </figcaption>
+      `;
+      certGrid.appendChild(card);
+      card.addEventListener('click', () => openLightbox(c.image, c.title));
+    });
+    if (d.certificates.length === 0) {
+      certGrid.innerHTML = '<p class="section-text">Certificates coming soon.</p>';
+    }
+  }
+
+  // Education
+  const eduList = document.getElementById('education-list');
+  if (eduList && Array.isArray(d.education)) {
+    eduList.innerHTML = '';
+    d.education.forEach(edu => {
+      const card = document.createElement('article');
+      card.className = 'edu-card reveal';
+      card.innerHTML = `
+        <div class="edu-header">
+          <div>
+            <div class="edu-school">${edu.school}</div>
+            <div class="edu-degree">${edu.degree}</div>
+          </div>
+          <div class="edu-period">${edu.period}</div>
+        </div>
+        ${edu.summary ? `<p class="edu-summary">${edu.summary}</p>` : ''}
+        ${Array.isArray(edu.skills) && edu.skills.length ? `<div class="edu-skills">${edu.skills.map(s => `<span class=\"edu-skill\">${s}</span>`).join('')}</div>` : ''}
+      `;
+      eduList.appendChild(card);
+    });
+  }
+
+  // Lightbox for certificates
+  let lightboxEl = null;
+  function openLightbox(src, title) {
+    if (!src) return;
+    if (!lightboxEl) {
+      lightboxEl = document.createElement('div');
+      lightboxEl.className = 'lightbox';
+      lightboxEl.innerHTML = `
+        <div class="lightbox-inner">
+          <button class="lightbox-close" aria-label="Close">✕</button>
+          <img class="lightbox-img" src="" alt="Certificate">
+        </div>
+      `;
+      document.body.appendChild(lightboxEl);
+      lightboxEl.addEventListener('click', (e) => {
+        if (e.target === lightboxEl || (e.target instanceof Element && e.target.classList.contains('lightbox-close'))) {
+          lightboxEl.classList.remove('show');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') lightboxEl?.classList.remove('show');
+      });
+    }
+    const img = lightboxEl.querySelector('.lightbox-img');
+    if (img) {
+      img.setAttribute('src', src);
+      img.setAttribute('alt', title || 'Certificate');
+    }
+    lightboxEl.classList.add('show');
+  }
+
   // Experience
   const expEl = document.getElementById('experience-timeline');
   console.log('Experience element:', expEl);
@@ -292,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const contactResume = document.getElementById('contact-resume');
   contactText.textContent = d.contact.blurb;
   contactEmail.href = `mailto:${d.basics.email}`;
+  contactEmail.textContent = d.basics.email ? `Email ${d.basics.name?.split(' ')[0] || ''}`.trim() : contactEmail.textContent;
   
   // Setup fizzy download button
   const fizzyInput = document.getElementById('fizzy-download');
@@ -327,6 +403,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+  // Smooth scroll for internal links + active nav link
+  const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (!target) return;
+      e.preventDefault();
+      const y = target.getBoundingClientRect().top + window.pageYOffset - (headerHeight + 8);
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      history.pushState(null, '', targetId);
+    });
+  });
+
+  const sections = Array.from(document.querySelectorAll('main section[id]'));
+  const navLinks = Array.from(document.querySelectorAll('.site-nav a[href^="#"]'));
+  function highlightNav() {
+    const scrollPos = window.scrollY + headerHeight + 16;
+    let current = sections[0]?.id;
+    for (const s of sections) {
+      if (scrollPos >= s.offsetTop) current = s.id;
+    }
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${current}`));
+  }
+  window.addEventListener('scroll', highlightNav, { passive: true });
+  highlightNav();
+
+  // Scroll progress bar
+  const progress = document.getElementById('scroll-progress');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const p = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    if (progress) progress.style.width = `${p}%`;
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  // Back to top
+  const backToTop = document.getElementById('back-to-top');
+  function toggleBackToTop() {
+    if (!backToTop) return;
+    backToTop.classList.toggle('show', window.scrollY > 600);
+  }
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  toggleBackToTop();
+
+  // Magnetic buttons
+  const magnets = document.querySelectorAll('.magnetic');
+  magnets.forEach(btn => {
+    const strength = 20;
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const relX = e.clientX - rect.left - rect.width / 2;
+      const relY = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${(relX/rect.width)*strength}px, ${(relY/rect.height)*strength}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+
+  // Contact form behavior
+  const form = document.getElementById('contact-form');
+  const toast = document.getElementById('toast');
+  const copyBtn = document.getElementById('copy-email');
+  const emailTo = d.basics.email;
+
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  copyBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(emailTo);
+      showToast('Email copied');
+    } catch (e) {
+      showToast('Copy failed');
+    }
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nameEl = document.getElementById('cf-name');
+    const fromEl = document.getElementById('cf-from');
+    const msgEl = document.getElementById('cf-message');
+    const name = (nameEl && 'value' in nameEl) ? String(nameEl.value).trim() : '';
+    const from = (fromEl && 'value' in fromEl) ? String(fromEl.value).trim() : '';
+    const message = (msgEl && 'value' in msgEl) ? String(msgEl.value).trim() : '';
+    if (!name || !from || !message) {
+      showToast('Please fill out all fields');
+      return;
+    }
+    const subject = encodeURIComponent(`Portfolio Contact — ${name}`);
+    const body = encodeURIComponent(`From: ${name} <${from}>\n\n${message}`);
+    window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+    showToast('Opening email client…');
+    form.reset();
+  });
+
   // Hide loading screen after everything is loaded
   const loadingScreen = document.getElementById('loading-screen');
   setTimeout(() => {
@@ -355,6 +536,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
   }
 });
-
 
 

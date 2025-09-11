@@ -16,7 +16,7 @@
   basics: {
     name: "Ahmed Elrweny",
     role: "Full Stack Developer",
-    location: " ",
+    location: "Kafr EL-Sheikh, Egypt",
     email: "elrwenyahmed05@gmail.com",
     resumeUrl: "assets/Resume.pdf",
     profileImage: "assets/Personal2.jpg",
@@ -92,18 +92,38 @@
       url: "https://github.com/ahmedelrweny1"
     }
   ],
+  certificates: [
+    { title: "ACPC", image: "assets/certificates/ACPC.jpg", description: "Arab Collegiate Programming Contest participation and problem-solving achievement." },
+    { title: "ALA", image: "assets/certificates/ALA.jpg", description: "ALX/ALA program certificate highlighting leadership and technology growth." },
+    { title: "IEEE", image: "assets/certificates/IEEE.jpg", description: "IEEE certificate recognizing contributions and engagement in engineering community." }
+  ],
   experience: [
     {
-      role: "Full Stack Developer",
-      company: "Freelance Projects",
-      period: "2022 — Present",
-      summary: "Developing web applications using .NET Framework, Angular, and modern database technologies. Focus on clean architecture and scalable solutions."
+      role: "Summer Intern",
+      company: "Digital Egypt Pioneers Initiative (DEPI)",
+      period: "Jun 2025 — Present",
+      summary: "Full‑stack .NET internship (hybrid, Alexandria). Building skills in .NET Framework and freelancing workflows while working on real‑world solutions and expanding professional connections."
     },
     {
-      role: "Computer Science Student",
-      company: "Academic Projects",
+      role: "ALA Program Attendant",
+      company: "African Leadership Academy",
+      period: "Jun 2025 — Jun 2025",
+      summary: "Led a team under the BUILD slogan (Believe, Understand, Innovate, Deliver) to tackle digital device addiction. Proposed a software/mobile app solution and presented it. Presentation: <a href=\"https://www.canva.com/design/DAGtyVcDDEs/1UeMHq9iv_BVZCLvGRQJ3A/edit?ui=eyJIIjp7IkEiOnRydWV9fQ\" target=\"_blank\" rel=\"noopener\">Canva link</a>."
+    },
+    {
+      role: "Backend .NET Member",
+      company: "IEEE",
+      period: "Oct 2024 — Feb 2025",
+      summary: "Built an ASP.NET MVC company task management app with a team. Stack: ASP.NET MVC, Entity Framework, LINQ, C#, SQL Server, HTML5, CSS3, Bootstrap. Features covered admin CRUD, task assignment and tracking, supervisors oversight, and employee task delivery."
+    }
+  ],
+  education: [
+    {
+      school: "Kafr El-Sheikh University",
+      degree: "B.Sc. in Computer Science",
       period: "2020 — 2024",
-      summary: "Completed various projects in software engineering, database design, and web development. Strong foundation in algorithms and data structures."
+      summary: "Focused on software engineering, web development, and algorithms.",
+      skills: ["Data Structures", "Algorithms", "OOP", "Database Design", "Web Development"]
     }
   ],
   contact: {
@@ -114,5 +134,4 @@
   // Log successful initialization
   console.log('Portfolio data initialized successfully');
 })();
-
 
