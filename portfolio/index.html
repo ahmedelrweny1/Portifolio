@@ -186,7 +186,7 @@
     <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Embed portfolio data to ensure availability -->
     <script>
         window.PORTFOLIO_DATA = {
@@ -312,9 +312,18 @@
             }
         };
     </script>
-    <script src="js/theme.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/three-hero.js"></script>
+    <script src="js/theme.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/three-hero.js" defer></script>
+    <noscript>
+      <style>
+        .loading-screen{display:none!important}
+        .reveal{opacity:1!important;transform:none!important}
+      </style>
+      <div class="container" style="padding:1rem;color:#e6eaef">
+        JavaScript is disabled in this in‑app browser. Please open in your browser for the full experience.
+      </div>
+    </noscript>
 </body>
 </html>
 
