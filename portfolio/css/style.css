@@ -114,6 +114,10 @@ body {
   line-height: 1.6;
 }
 
+/* No-JS fallback: reveal content by default if JS didn't run */
+html:not(.js) .reveal { opacity: 1 !important; transform: none !important; }
+html:not(.js) .reveal.visible { animation: none !important; }
+
 /* Scroll progress bar */
 #scroll-progress {
   position: fixed;
