@@ -6,11 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Meta: title + favicon
-  if (d.meta?.siteTitle) {
+  // Meta: title + favicon (no optional chaining for older browsers)
+  if (d.meta && d.meta.siteTitle) {
     document.title = d.meta.siteTitle;
   }
-  if (d.meta?.favicon) {
+  if (d.meta && d.meta.favicon) {
     const link = document.querySelector('link[rel="icon"]') || document.createElement('link');
     link.rel = 'icon';
     link.href = d.meta.favicon;
@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') lightboxEl?.classList.remove('show');
+        if (e.key === 'Escape' && lightboxEl) lightboxEl.classList.remove('show');
       });
     }
     const img = lightboxEl.querySelector('.lightbox-img');
@@ -391,22 +391,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.getElementById('year');
   yearEl.textContent = new Date().getFullYear();
 
-  // Intersection observer for reveals
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Intersection observer for reveals with fallback
+  if (window.IntersectionObserver) {
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  }
 
   // Smooth scroll for internal links + active nav link
-  const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
+  const headerEl = document.querySelector('.site-header');
+  const headerHeight = (headerEl && headerEl.offsetHeight) || 0;
+  document.querySelectorAll('a[href^="#"]').forEach(function(link){
+    link.addEventListener('click', function(e){
       const targetId = link.getAttribute('href');
       if (!targetId || targetId === '#') return;
       const target = document.querySelector(targetId);
@@ -418,15 +422,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  const sections = Array.from(document.querySelectorAll('main section[id]'));
-  const navLinks = Array.from(document.querySelectorAll('.site-nav a[href^="#"]'));
+  const sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  const navLinks = Array.prototype.slice.call(document.querySelectorAll('.site-nav a[href^="#"]'));
   function highlightNav() {
     const scrollPos = window.scrollY + headerHeight + 16;
-    let current = sections[0]?.id;
-    for (const s of sections) {
+    var current = sections[0] ? sections[0].id : null;
+    for (var i = 0; i < sections.length; i++) {
+      var s = sections[i];
       if (scrollPos >= s.offsetTop) current = s.id;
     }
-    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${current}`));
+    navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === `#${current}`); });
   }
   window.addEventListener('scroll', highlightNav, { passive: true });
   highlightNav();
@@ -449,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
     backToTop.classList.toggle('show', window.scrollY > 600);
   }
   window.addEventListener('scroll', toggleBackToTop, { passive: true });
-  backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (backToTop) backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
   toggleBackToTop();
 
   // Magnetic buttons
@@ -480,16 +485,26 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => toast.classList.remove('show'), 1800);
   }
 
-  copyBtn?.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(emailTo);
-      showToast('Email copied');
-    } catch (e) {
-      showToast('Copy failed');
-    }
-  });
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function(){
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(emailTo).then(function(){
+          showToast('Email copied');
+        }).catch(function(){ showToast('Copy failed'); });
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = emailTo; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+          showToast('Email copied');
+        } catch(e) {
+          showToast('Copy failed');
+        }
+      }
+    });
+  }
 
-  form?.addEventListener('submit', (e) => {
+  if (form) form.addEventListener('submit', function(e){
     e.preventDefault();
     const nameEl = document.getElementById('cf-name');
     const fromEl = document.getElementById('cf-from');
