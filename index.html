@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <title>Professional Portfolio</title>
+    <meta name="description" content="A modern, responsive developer portfolio with dark/light mode and 3D hero.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <script>document.documentElement.classList.add('js');</script>
+    <script>
+      // Ensure relative assets resolve from domain root in production, but keep file:// working locally
+      (function(){
+        try {
+          if (location.protocol !== 'file:') {
+            var base = document.createElement('base');
+            base.setAttribute('href', '/');
+            document.head.appendChild(base);
+          }
+        } catch(_){}
+      })();
+    </script>
+</head>
+<body class="theme-auto">
+    <div id="scroll-progress" aria-hidden="true"></div>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="ring">
+            Loading
+            <span></span>
+        </div>
+    </div>
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" role="banner">
+        <div class="container header-inner">
+            <a class="brand" href="#hero" aria-label="Home">
+                <span class="brand-mark" aria-hidden="true">◆</span>
+                <span class="brand-text">Portfolio</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Primary">
+                <button class="nav-toggle" aria-controls="site-menu" aria-expanded="false">Menu</button>
+                <ul id="site-menu" class="menu">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+        <section id="hero" class="hero">
+            <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
+            <div class="container hero-inner">
+                <div class="hero-content">
+                    <div class="profile-wrap">
+                        <img id="profile-image" class="profile-image" src="assets/Personal2.jpg" alt="Profile photo">
+                    </div>
+                    <h1 id="hero-name" class="hero-title gradient-text">Your Name</h1>
+                    <p id="hero-role" class="hero-subtitle shimmer-text">Your Role</p>
+                    <div class="hero-cta">
+                        <a id="cta-primary" class="btn btn-primary magnetic" href="#projects">View Projects</a>
+                        <a id="cta-secondary" class="btn btn-outline magnetic" href="#contact">Contact Me</a>
+                    </div>
+                    <div id="social-links" class="social-links" aria-label="Social links"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container section-inner">
+                <h2 class="section-title">About</h2>
+                <p id="about-text" class="section-text">I craft delightful digital experiences.</p>
+            </div>
+        </section>
+
+        <section id="skills" class="section alt">
+            <div class="container section-inner">
+                <h2 class="section-title">Skills</h2>
+                <div id="skills-categories" class="skills-categories"></div>
+                <div id="skills-container" class="skills-container"></div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container section-inner">
+                <h2 class="section-title">Projects</h2>
+                <div id="projects-grid" class="projects-grid"></div>
+            </div>
+        </section>
+        
+        <section id="project-gallery" class="section alt">
+            <div class="container section-inner">
+                <h2 class="section-title">Project Gallery</h2>
+                <div class="gallery-container">
+                    <div id="gallery-slider" class="gallery-slider"></div>
+                    <div class="gallery-nav">
+                        <button id="gallery-prev" class="gallery-arrow" aria-label="Previous project">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div id="gallery-dots" class="gallery-dots"></div>
+                        <button id="gallery-next" class="gallery-arrow" aria-label="Next project">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certificates" class="section">
+            <div class="container section-inner">
+                <h2 class="section-title">Certificates</h2>
+                <div id="cert-grid" class="cert-grid"></div>
+            </div>
+        </section>
+
+        <section id="education" class="section alt">
+            <div class="container section-inner">
+                <h2 class="section-title">Education</h2>
+                <div id="education-list" class="education-list"></div>
+            </div>
+        </section>
+
+        <section id="experience" class="section alt">
+            <div class="container section-inner">
+                <h2 class="section-title">Experience</h2>
+                <ol id="experience-timeline" class="timeline"></ol>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container section-inner">
+                <h2 class="section-title">Contact</h2>
+                <div class="contact-card">
+                    <p id="contact-text">Open to opportunities and collaborations. Let’s build something great.</p>
+                    <div class="contact-actions">
+                        <a id="contact-email" class="btn btn-primary" href="mailto:hello@example.com">Email Me</a>
+                        <button id="copy-email" class="btn btn-outline icon-btn" type="button" aria-label="Copy email">Copy</button>
+                        <div class="fizzy-button-container">
+                            <input id="fizzy-download" type="checkbox">
+                            <label for="fizzy-download" class="fizzy-button" id="contact-resume">
+                                <span class="button-icon">⬇</span>
+                                <span class="button-text">Download CV</span>
+                                <span class="tick">✓</span>
+                                <div class="button-spots">
+                                    <div class="button-spot" style="width: 4px; height: 4px; top: 10px; left: 20px; animation-delay: 0.1s;"></div>
+                                    <div class="button-spot" style="width: 3px; height: 3px; top: 15px; left: 40px; animation-delay: 0.2s;"></div>
+                                    <div class="button-spot" style="width: 5px; height: 5px; top: 25px; left: 60px; animation-delay: 0.3s;"></div>
+                                    <div class="button-spot" style="width: 2px; height: 2px; top: 5px; left: 80px; animation-delay: 0.4s;"></div>
+                                    <div class="button-spot" style="width: 4px; height: 4px; top: 20px; left: 100px; animation-delay: 0.5s;"></div>
+                                    <div class="button-spot" style="width: 3px; height: 3px; top: 30px; left: 120px; animation-delay: 0.6s;"></div>
+                                    <div class="button-spot" style="width: 6px; height: 6px; top: 8px; left: 140px; animation-delay: 0.7s;"></div>
+                                    <div class="button-spot" style="width: 2px; height: 2px; top: 18px; left: 160px; animation-delay: 0.8s;"></div>
+                                    <div class="button-spot" style="width: 4px; height: 4px; top: 35px; left: 180px; animation-delay: 0.9s;"></div>
+                                    <div class="button-spot" style="width: 3px; height: 3px; top: 12px; left: 200px; animation-delay: 1.0s;"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <form id="contact-form" class="contact-form" novalidate>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <input id="cf-name" name="name" type="text" required placeholder=" ">
+                                <label for="cf-name">Your name</label>
+                            </div>
+                            <div class="form-field">
+                                <input id="cf-from" name="from" type="email" required placeholder=" ">
+                                <label for="cf-from">Your email</label>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <textarea id="cf-message" name="message" rows="5" required placeholder=" "></textarea>
+                            <label for="cf-message">Your message</label>
+                        </div>
+                        <button class="btn btn-primary magnetic" type="submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="container footer-inner">
+            <p id="footer-copy">© <span id="year">2025</span> @rweny</p>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Embed portfolio data to ensure availability -->
+    <script>
+        window.PORTFOLIO_DATA = {
+            meta: {
+                siteTitle: "Ahmed Elrweny — Full Stack Developer",
+                favicon: ""
+            },
+            basics: {
+                name: "Ahmed Elrweny",
+                role: "Full Stack Developer",
+                location: "Kafr EL-Sheikh, Egypt",
+                email: "elrwenyahmed05@gmail.com",
+                resumeUrl: "assets/Resume.pdf",
+                profileImage: "assets/Personal2.jpg",
+                about: "I'm Ahmed, a full-stack developer who traded the safety of traditional Engineering for the creative chaos of Computer Science.\n\nI thrive in the space between \"that won't work\" and \"how did you do that?\"\nChess player ♞ | Football striker ⚽ | Gamer 🎮 | Problem-solver 🔧\nRoutine code makes me twitch. Unsolved puzzles make me smile.\nIf you're looking for someone who follows instructions, keep scrolling.\nIf you want someone who rewrites them — we should talk.",
+                ctaPrimaryText: "View Projects",
+                ctaSecondaryText: "Contact Me"
+            },
+            social: [
+                { label: "GitHub", url: "https://github.com/ahmedelrweny1" },
+                { label: "LinkedIn", url: "https://www.linkedin.com/in/ahmed-elrweny/" }
+            ],
+            skillCategories: [
+                {
+                    name: "Backend",
+                    skills: [
+                        { name: "C#/.NET", level: "Advanced" },
+                        { name: "ASP.NET MVC", level: "Advanced" },
+                        { name: "ASP.NET Core", level: "Advanced" },
+                        { name: "Entity Framework", level: "Advanced" },
+                        { name: "REST APIs", level: "Advanced" },
+                        { name: "PHP", level: "Intermediate" }
+                    ]
+                },
+                {
+                    name: "Frontend",
+                    skills: [
+                        { name: "Angular", level: "Advanced" },
+                        { name: "JavaScript", level: "Advanced" },
+                        { name: "TypeScript", level: "Intermediate" },
+                        { name: "HTML5", level: "Advanced" },
+                        { name: "CSS3", level: "Advanced" },
+                        { name: "Bootstrap", level: "Advanced" }
+                    ]
+                },
+                {
+                    name: "Database",
+                    skills: [
+                        { name: "SQL Server", level: "Advanced" },
+                        { name: "MySQL", level: "Advanced" },
+                        { name: "Database Design", level: "Advanced" }
+                    ]
+                },
+                {
+                    name: "Tools & Other",
+                    skills: [
+                        { name: "Git", level: "Advanced" },
+                        { name: "Visual Studio", level: "Advanced" },
+                        { name: "VS Code", level: "Advanced" },
+                        { name: "Problem Solving", level: "Advanced" },
+                        { name: "Software Architecture", level: "Intermediate" }
+                    ]
+                }
+            ],
+            projects: [
+                {
+                    title: "Task Management System",
+                    description: "Full-stack MVC application for task management with role-based access control and real-time updates.",
+                    tech: ["C#", "ASP.NET MVC", "SQL Server", "Entity Framework"],
+                    url: "https://github.com/ahmedelrweny1",
+                    image: "assets/MainPage.png"
+                },
+                {
+                    title: "Job Simulation Platform",
+                    description: "Interactive platform for simulating real-world job scenarios and skill assessments.",
+                    tech: ["C#", ".NET Core", "SQL Server", "REST APIs"],
+                    url: "https://github.com/ahmedelrweny1",
+                    image: "assets/MainPage2.png"
+                },
+                {
+                    title: "Library Management System",
+                    description: "Web-based library management system with book tracking, user management, and rental functionality.",
+                    tech: ["PHP", "MySQL", "HTML5", "CSS3", "JavaScript"],
+                    url: "https://github.com/ahmedelrweny1"
+                }
+            ],
+            certificates: [
+                { title: "ACPC", image: "assets/certificates/ACPC.jpg", description: "Arab Collegiate Programming Contest participation and problem-solving achievement." },
+                { title: "ALA", image: "assets/certificates/ALA.jpg", description: "ALX/ALA program certificate highlighting leadership and technology growth." },
+                { title: "IEEE", image: "assets/certificates/IEEE.jpg", description: "IEEE certificate recognizing contributions and engagement in engineering community." }
+            ],
+            experience: [
+                {
+                    role: "Summer Intern",
+                    company: "Digital Egypt Pioneers Initiative (DEPI)",
+                    period: "Jun 2025 — Present",
+                    summary: "Full‑stack .NET internship (hybrid, Alexandria). Building skills in .NET Framework and freelancing workflows while working on real‑world solutions and expanding professional connections."
+                },
+                {
+                    role: "ALA Program Attendant",
+                    company: "African Leadership Academy",
+                    period: "Jun 2025 — Jun 2025",
+                    summary: "Led a team under the BUILD slogan (Believe, Understand, Innovate, Deliver) to tackle digital device addiction. Proposed a software/mobile app solution and presented it."
+                },
+                {
+                    role: "Backend .NET Member",
+                    company: "IEEE",
+                    period: "Oct 2024 — Feb 2025",
+                    summary: "Built an ASP.NET MVC company task management app with a team. Stack: ASP.NET MVC, Entity Framework, LINQ, C#, SQL Server, HTML5, CSS3, Bootstrap. Features covered admin CRUD, task assignment and tracking, supervisors oversight, and employee task delivery."
+                }
+            ],
+            education: [
+                {
+                    school: "Kafr El-Sheikh University",
+                    degree: "B.Sc. in Computer Science",
+                    period: "2020 — 2024",
+                    summary: "Focused on software engineering, web development, and algorithms.",
+                    skills: ["Data Structures", "Algorithms", "OOP", "Database Design", "Web Development"]
+                }
+            ],
+            contact: {
+                blurb: "Open to opportunities and collaborations."
+            }
+        };
+    </script>
+    <!-- Minimal inline render (ES5) so content appears even if external JS is blocked) -->
+    <script>
+      (function(){
+        try {
+          var d = window.PORTFOLIO_DATA || {};
+          // Hero
+          var nameEl = document.getElementById('hero-name');
+          var roleEl = document.getElementById('hero-role');
+          var imgEl = document.getElementById('profile-image');
+          if (nameEl && d.basics && d.basics.name) nameEl.textContent = d.basics.name;
+          if (roleEl && d.basics && d.basics.role) roleEl.textContent = d.basics.role + (d.basics.location ? ' · ' + d.basics.location : '');
+          if (imgEl && d.basics && d.basics.profileImage) imgEl.src = d.basics.profileImage;
+
+          // About
+          var aboutEl = document.getElementById('about-text');
+          if (aboutEl && d.basics && d.basics.about) aboutEl.innerHTML = String(d.basics.about).replace(/\n/g,'<br>');
+
+          // Social
+          var socialEl = document.getElementById('social-links');
+          if (socialEl && d.social && d.social.length) {
+            socialEl.innerHTML = '';
+            for (var i=0;i<d.social.length;i++){
+              var a=document.createElement('a');
+              a.href=d.social[i].url||'#'; a.target='_blank'; a.rel='noopener'; a.textContent=d.social[i].label||'Link';
+              socialEl.appendChild(a);
+            }
+          }
+
+          // Skills (simple render)
+          var skillsCats = document.getElementById('skills-categories');
+          var skillsContainer = document.getElementById('skills-container');
+          if (skillsCats && skillsContainer && d.skillCategories && d.skillCategories.length){
+            skillsCats.innerHTML=''; skillsContainer.innerHTML='';
+            for (var c=0;c<d.skillCategories.length;c++){
+              var tab=document.createElement('button');
+              tab.className='category-tab'+(c===0?' active':'');
+              tab.textContent=d.skillCategories[c].name||('Cat '+(c+1));
+              tab.setAttribute('data-category', String(c));
+              skillsCats.appendChild(tab);
+              var ul=document.createElement('ul'); ul.className='skills-grid'+(c===0?' active':''); ul.id='skills-category-'+c;
+              var skills=d.skillCategories[c].skills||[];
+              for (var s=0;s<skills.length;s++){
+                var li=document.createElement('li'); li.className='skill-item visible';
+                li.innerHTML = '<div class="skill-header"><div class="skill-name">'+skills[s].name+'</div><div class="skill-level">'+(skills[s].level||'')+'</div></div>'+
+                               '<div class="skill-progress"><div class="skill-progress-bar" style="width:'+(skills[s].level==='Advanced'? '90%': skills[s].level==='Intermediate'?'65%':'50%')+';"></div></div>';
+                ul.appendChild(li);
+              }
+              skillsContainer.appendChild(ul);
+            }
+          }
+
+          // Projects (simple cards)
+          var projEl=document.getElementById('projects-grid');
+          if (projEl && d.projects && d.projects.length){
+            projEl.innerHTML='';
+            for (var p=0;p<d.projects.length;p++){
+              var card=document.createElement('article'); card.className='project-card reveal visible';
+              var link=(d.projects[p].url||'#');
+              var title=d.projects[p].title||'Project';
+              var desc=d.projects[p].description||'';
+              var tags=(d.projects[p].tech||[]).map(function(t){return '<span class="tag">'+t+'</span>';}).join('');
+              card.innerHTML='<h3 class="project-title"><a href="'+link+'" target="_blank" rel="noopener">'+title+'</a></h3>'+
+                             '<p class="project-desc">'+desc+'</p>'+
+                             '<div class="project-meta">'+tags+'</div>';
+              projEl.appendChild(card);
+            }
+          }
+
+          // Certificates
+          var certGrid=document.getElementById('cert-grid');
+          if (certGrid && d.certificates){
+            certGrid.innerHTML='';
+            for (var ci=0;ci<d.certificates.length;ci++){
+              var cfig=document.createElement('figure'); cfig.className='cert-card reveal visible';
+              var c=d.certificates[ci];
+              var imgSrc=c.image||''; var title=c.title||'Certificate'; var desc=c.description||'';
+              cfig.innerHTML='<img class="cert-thumb" src="'+imgSrc+'" alt="'+title+'">'+
+                             '<figcaption class="cert-caption"><div class="cert-title">'+title+'</div>'+
+                             (desc?'<div class="cert-desc">'+desc+'</div>':'')+
+                             '</figcaption>';
+              certGrid.appendChild(cfig);
+            }
+          }
+
+          // Education
+          var eduList=document.getElementById('education-list');
+          if (eduList && d.education){
+            eduList.innerHTML='';
+            for (var ei=0;ei<d.education.length;ei++){
+              var e=d.education[ei];
+              var art=document.createElement('article'); art.className='edu-card reveal visible';
+              var skillsArr=e.skills||[];
+              art.innerHTML='<div class="edu-header"><div><div class="edu-school">'+(e.school||'')+'</div><div class="edu-degree">'+(e.degree||'')+'</div></div><div class="edu-period">'+(e.period||'')+'</div></div>'+
+                            (e.summary?'<p class="edu-summary">'+e.summary+'</p>':'')+
+                            (skillsArr.length?'<div class="edu-skills">'+skillsArr.map(function(s){return '<span class="edu-skill">'+s+'</span>';}).join('')+'</div>':'');
+              eduList.appendChild(art);
+            }
+          }
+
+          // Experience
+          var expEl=document.getElementById('experience-timeline');
+          if (expEl && d.experience){
+            expEl.innerHTML='';
+            for (var xi=0;xi<d.experience.length;xi++){
+              var ex=d.experience[xi];
+              var li=document.createElement('li'); li.className='reveal visible';
+              li.innerHTML='<div class="role">'+(ex.role||'')+'</div><div class="company">'+(ex.company||'')+'</div><div class="period">'+(ex.period||'')+'</div><p>'+ (ex.summary||'') +'</p>';
+              expEl.appendChild(li);
+            }
+          }
+
+          // Contact
+          var contactText=document.getElementById('contact-text');
+          var contactEmail=document.getElementById('contact-email');
+          if (contactText && d.contact && d.contact.blurb) contactText.textContent=d.contact.blurb;
+          if (contactEmail && d.basics && d.basics.email){
+            contactEmail.href='mailto:'+d.basics.email;
+            var fn=d.basics.name? d.basics.name.split(' ')[0] : '';
+            contactEmail.textContent=('Email '+fn).trim();
+          }
+        } catch(e){
+          // fail silent
+        }
+      })();
+    </script>
+    <script src="js/theme.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/three-hero.js" defer></script>
+    <noscript>
+      <style>
+        .loading-screen{display:none!important}
+        .reveal{opacity:1!important;transform:none!important}
+      </style>
+      <div class="container" style="padding:1rem;color:#e6eaef">
+        JavaScript is disabled in this in‑app browser. Please open in your browser for the full experience.
+      </div>
+    </noscript>
+</body>
+</html>
+
+
