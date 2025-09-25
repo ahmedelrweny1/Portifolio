@@ -324,6 +324,131 @@
             }
         };
     </script>
+    <!-- Minimal inline render (ES5) so content appears even if external JS is blocked) -->
+    <script>
+      (function(){
+        try {
+          var d = window.PORTFOLIO_DATA || {};
+          // Hero
+          var nameEl = document.getElementById('hero-name');
+          var roleEl = document.getElementById('hero-role');
+          var imgEl = document.getElementById('profile-image');
+          if (nameEl && d.basics && d.basics.name) nameEl.textContent = d.basics.name;
+          if (roleEl && d.basics && d.basics.role) roleEl.textContent = d.basics.role + (d.basics.location ? ' · ' + d.basics.location : '');
+          if (imgEl && d.basics && d.basics.profileImage) imgEl.src = d.basics.profileImage;
+
+          // About
+          var aboutEl = document.getElementById('about-text');
+          if (aboutEl && d.basics && d.basics.about) aboutEl.innerHTML = String(d.basics.about).replace(/\n/g,'<br>');
+
+          // Social
+          var socialEl = document.getElementById('social-links');
+          if (socialEl && d.social && d.social.length) {
+            socialEl.innerHTML = '';
+            for (var i=0;i<d.social.length;i++){
+              var a=document.createElement('a');
+              a.href=d.social[i].url||'#'; a.target='_blank'; a.rel='noopener'; a.textContent=d.social[i].label||'Link';
+              socialEl.appendChild(a);
+            }
+          }
+
+          // Skills (simple render)
+          var skillsCats = document.getElementById('skills-categories');
+          var skillsContainer = document.getElementById('skills-container');
+          if (skillsCats && skillsContainer && d.skillCategories && d.skillCategories.length){
+            skillsCats.innerHTML=''; skillsContainer.innerHTML='';
+            for (var c=0;c<d.skillCategories.length;c++){
+              var tab=document.createElement('button');
+              tab.className='category-tab'+(c===0?' active':'');
+              tab.textContent=d.skillCategories[c].name||('Cat '+(c+1));
+              tab.setAttribute('data-category', String(c));
+              skillsCats.appendChild(tab);
+              var ul=document.createElement('ul'); ul.className='skills-grid'+(c===0?' active':''); ul.id='skills-category-'+c;
+              var skills=d.skillCategories[c].skills||[];
+              for (var s=0;s<skills.length;s++){
+                var li=document.createElement('li'); li.className='skill-item visible';
+                li.innerHTML = '<div class="skill-header"><div class="skill-name">'+skills[s].name+'</div><div class="skill-level">'+(skills[s].level||'')+'</div></div>'+
+                               '<div class="skill-progress"><div class="skill-progress-bar" style="width:'+(skills[s].level==='Advanced'? '90%': skills[s].level==='Intermediate'?'65%':'50%')+';"></div></div>';
+                ul.appendChild(li);
+              }
+              skillsContainer.appendChild(ul);
+            }
+          }
+
+          // Projects (simple cards)
+          var projEl=document.getElementById('projects-grid');
+          if (projEl && d.projects && d.projects.length){
+            projEl.innerHTML='';
+            for (var p=0;p<d.projects.length;p++){
+              var card=document.createElement('article'); card.className='project-card reveal visible';
+              var link=(d.projects[p].url||'#');
+              var title=d.projects[p].title||'Project';
+              var desc=d.projects[p].description||'';
+              var tags=(d.projects[p].tech||[]).map(function(t){return '<span class="tag">'+t+'</span>';}).join('');
+              card.innerHTML='<h3 class="project-title"><a href="'+link+'" target="_blank" rel="noopener">'+title+'</a></h3>'+
+                             '<p class="project-desc">'+desc+'</p>'+
+                             '<div class="project-meta">'+tags+'</div>';
+              projEl.appendChild(card);
+            }
+          }
+
+          // Certificates
+          var certGrid=document.getElementById('cert-grid');
+          if (certGrid && d.certificates){
+            certGrid.innerHTML='';
+            for (var ci=0;ci<d.certificates.length;ci++){
+              var cfig=document.createElement('figure'); cfig.className='cert-card reveal visible';
+              var c=d.certificates[ci];
+              var imgSrc=c.image||''; var title=c.title||'Certificate'; var desc=c.description||'';
+              cfig.innerHTML='<img class="cert-thumb" src="'+imgSrc+'" alt="'+title+'">'+
+                             '<figcaption class="cert-caption"><div class="cert-title">'+title+'</div>'+
+                             (desc?'<div class="cert-desc">'+desc+'</div>':'')+
+                             '</figcaption>';
+              certGrid.appendChild(cfig);
+            }
+          }
+
+          // Education
+          var eduList=document.getElementById('education-list');
+          if (eduList && d.education){
+            eduList.innerHTML='';
+            for (var ei=0;ei<d.education.length;ei++){
+              var e=d.education[ei];
+              var art=document.createElement('article'); art.className='edu-card reveal visible';
+              var skillsArr=e.skills||[];
+              art.innerHTML='<div class="edu-header"><div><div class="edu-school">'+(e.school||'')+'</div><div class="edu-degree">'+(e.degree||'')+'</div></div><div class="edu-period">'+(e.period||'')+'</div></div>'+
+                            (e.summary?'<p class="edu-summary">'+e.summary+'</p>':'')+
+                            (skillsArr.length?'<div class="edu-skills">'+skillsArr.map(function(s){return '<span class="edu-skill">'+s+'</span>';}).join('')+'</div>':'');
+              eduList.appendChild(art);
+            }
+          }
+
+          // Experience
+          var expEl=document.getElementById('experience-timeline');
+          if (expEl && d.experience){
+            expEl.innerHTML='';
+            for (var xi=0;xi<d.experience.length;xi++){
+              var ex=d.experience[xi];
+              var li=document.createElement('li'); li.className='reveal visible';
+              li.innerHTML='<div class="role">'+(ex.role||'')+'</div><div class="company">'+(ex.company||'')+'</div><div class="period">'+(ex.period||'')+'</div><p>'+ (ex.summary||'') +'</p>';
+              expEl.appendChild(li);
+            }
+          }
+
+          // Contact
+          var contactText=document.getElementById('contact-text');
+          var contactEmail=document.getElementById('contact-email');
+          if (contactText && d.contact && d.contact.blurb) contactText.textContent=d.contact.blurb;
+          if (contactEmail && d.basics && d.basics.email){
+            contactEmail.href='mailto:'+d.basics.email;
+            var fn=d.basics.name? d.basics.name.split(' ')[0] : '';
+            contactEmail.textContent=('Email '+fn).trim();
+          }
+        } catch(e){
+          // fail silent
+        }
+      })();
+    </script>
     <script src="js/theme.js" defer></script>
     <script src="js/main.js" defer></script>
     <script src="js/three-hero.js" defer></script>
