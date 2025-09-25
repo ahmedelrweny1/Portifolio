@@ -13,6 +13,18 @@
 
     <link rel="stylesheet" href="css/style.css">
     <script>document.documentElement.classList.add('js');</script>
+    <script>
+      // Ensure relative assets resolve from domain root in production, but keep file:// working locally
+      (function(){
+        try {
+          if (location.protocol !== 'file:') {
+            var base = document.createElement('base');
+            base.setAttribute('href', '/');
+            document.head.appendChild(base);
+          }
+        } catch(_){}
+      })();
+    </script>
 </head>
 <body class="theme-auto">
     <div id="scroll-progress" aria-hidden="true"></div>
@@ -326,6 +338,5 @@
     </noscript>
 </body>
 </html>
-
 
 
